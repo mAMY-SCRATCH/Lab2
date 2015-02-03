@@ -1,5 +1,6 @@
 #include "dynamicArray.h"
 #include <stdexcept>
+#include <algorithm>
 
 DynamicArray::DynamicArray()
 {
@@ -13,6 +14,10 @@ DynamicArray::DynamicArray()
 
 DynamicArray::DynamicArray(int _capacite)
 {
+	if (_capacite < 1)
+	{
+		throw std::invalid_argument("capacite de un minimum");
+	}
 	this->capacite = _capacite;
 	tabElements = new int[capacite];
 	for (unsigned int i = 0; i < capacite; i++)
@@ -39,51 +44,43 @@ int DynamicArray::getElement(int i)
 	}
 	else
 	{
-		throw std::out_of_range ("blah");
+		throw std::out_of_range ("out of range");
 	}
 }
 
 void DynamicArray::setElement(unsigned _index, int _valeur)
 {
 	
-	if (_index > capacite)
+	if (_index >= capacite)
 	{
-		int * newTabElement = new int[_index];
-		for (unsigned int i = 0; i < capacite; i++)
-		{
-			newTabElement[i] = tabElements[i];
-		}
-		
-		tabElements = newTabElement;
-		delete[]newTabElement;
+		setCapacite(_index + 1);
 	}
 	tabElements[_index] = _valeur;
 }
 
 void DynamicArray::setCapacite(unsigned _capacite)
 {
+	if (_capacite < 1)
+	{
+		throw std::invalid_argument("capacite de un minimum");
+	}
+
 	int * newTabElement = new int[_capacite];
+
 	for (unsigned int j = 0; j < _capacite; j++)
 	{
 		newTabElement[j] = 0;
 	}
-	if (capacite <= _capacite)
+	
+	for (unsigned int i = 0; i < std::min(capacite,_capacite); i++)
 	{
-		for (unsigned int i = 0; i < capacite; i++)
-		{
-			newTabElement[i] = tabElements[i];
-		}
-	}
-	else
-	{
-		for (unsigned int i = 0; i < _capacite; i++)
-		{
-			newTabElement[i] = tabElements[i];
-		}
+		newTabElement[i] = tabElements[i];
 	}
 	
 	
+	capacite = _capacite;
+	delete[]tabElements;
 	tabElements = newTabElement;
-	delete[]newTabElement;
+	
 
 }
