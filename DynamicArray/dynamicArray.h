@@ -7,10 +7,15 @@ class DynamicArray
 
 public:
 
+	DynamicArray();
+	~DynamicArray();
+	int getCapacite();
+	int getElement(int i);
 
 
 private:
 
+	int capacite;
 
 };
 
